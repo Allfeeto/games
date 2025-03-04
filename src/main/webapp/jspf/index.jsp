@@ -7,6 +7,14 @@
           href="${pageContext.request.contextPath}/jspf/css/style.css">
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
     <title>Главная страница</title>
+    <style>
+        #main {
+        	    display: flex;
+        	    justify-content: normal;
+        	    flex-direction: column;
+        	    gap: 0px;
+        }
+    </style>
 </head>
 <body>
     <jsp:include page="header.jsp" />
