@@ -68,10 +68,23 @@ public class DeveloperServlet extends HttpServlet {
         String ratingStr = request.getParameter("rating");
         double rating = 0;
 
+        // Проверка, что поля не пустые
+        if (name == null || name.trim().isEmpty() || ratingStr == null || ratingStr.trim().isEmpty()) {
+            // Если одно из полей пустое, добавляем атрибут с ошибкой
+            request.setAttribute("error", "Все поля должны быть заполнены!");
+            // Возвращаемся на ту же страницу (например, добавление разработчика)
+            request.getRequestDispatcher("/jspf/developer.jsp").forward(request, response);
+            return; // Завершаем выполнение метода
+        }
+
         try {
             rating = Double.parseDouble(ratingStr);
         } catch (NumberFormatException e) {
             e.printStackTrace();
+            // Если рейтинг не является числом, добавляем атрибут с ошибкой
+            request.setAttribute("error", "Рейтинг должен быть числовым значением!");
+            request.getRequestDispatcher("/jspf/developer.jsp").forward(request, response);
+            return;
         }
 
         EmpConnBuilder builder = new EmpConnBuilder();
@@ -88,7 +101,10 @@ public class DeveloperServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.getRequestDispatcher("/jspf/error.jsp").forward(request, response);
+            request.setAttribute("error", "Произошла ошибка при добавлении разработчика!");
+            request.getRequestDispatcher("/jspf/developer.jsp").forward(request, response);
         }
     }
+
+
 }

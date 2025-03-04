@@ -43,6 +43,12 @@
             <article>
                 <h3>Добавить разработчика</h3>
                 <div class="text-article">
+                        <!-- Выводим ошибку, если она есть -->
+        <c:if test="${not empty error}">
+            <div style="color: red; font-weight: bold;">
+                ${error}
+            </div>
+        </c:if>
                     <form method="POST" action="developers">
                         <p>
                             <label for="name">Имя</label>

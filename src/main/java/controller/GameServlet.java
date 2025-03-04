@@ -76,13 +76,34 @@ public class GameServlet extends HttpServlet {
         String genre = request.getParameter("genre");
         String systemRequirements = request.getParameter("systemRequirements");
 
+        // Проверка на пустые поля
+        if (title == null || title.trim().isEmpty() || releaseYear == null || releaseYear.trim().isEmpty() ||
+            genre == null || genre.trim().isEmpty() || systemRequirements == null || systemRequirements.trim().isEmpty()) {
+            // Если одно из полей пустое, добавляем атрибут с ошибкой
+            request.setAttribute("error", "Все поля должны быть заполнены!");
+            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);  // Ожидаем отобразить на той же странице
+            return; // Завершаем выполнение метода
+        }
+
+        // Проверка на корректность года выпуска
+        int releaseYearInt = 0;
+        try {
+            releaseYearInt = Integer.parseInt(releaseYear);
+        } catch (NumberFormatException e) {
+            // Ошибка преобразования в число
+            request.setAttribute("error", "Год выпуска должен быть числовым значением!");
+            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);
+            return;
+        }
+
         // Обработка добавления игры
         try (Connection conn = builder.getConnection()) {
             PreparedStatement preparedStatement = conn.prepareStatement(insert_game);
             preparedStatement.setString(1, title);
-            preparedStatement.setInt(2, Integer.parseInt(releaseYear));
+            preparedStatement.setInt(2, releaseYearInt);
             preparedStatement.setString(3, genre);
             preparedStatement.setString(4, systemRequirements);
+
             int rows = preparedStatement.executeUpdate();
 
             // Выводим результат выполнения
@@ -91,11 +112,14 @@ public class GameServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            getServletContext().getRequestDispatcher("/views/games.jsp").forward(request, response);
+            request.setAttribute("error", "Произошла ошибка при добавлении игры!");
+            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);
+            return;
         }
 
         // После добавления перенаправляем обратно на страницу с играми
         response.sendRedirect(request.getContextPath() + "/games");
     }
+
 
 }
