@@ -1,270 +1,139 @@
-
 body {
-width: 96%;
-margin-left: 2%;
-height: 130px;
-}
-header{
-height: 150px;
-border-radius: 5px;
-
-background: #ccccff
-;
-}
-#top-image
-{
-height
-: 130px
-;
-width
-: 130px
-;
-top
-: 20px
-;
-background: #6699ff
-;
-position
-: absolute
-;
-left
-: 5%
-;
-border-radius
-: 5px
-;
-}
-#user-panel
-{
-position
-: absolute
-;
-top
-: 20px
-;
-right
-: 5%
-;
-padding
-: 10px
-;
-background
-: #9999ff
-;
-border-radius
-: 5px
-;
-}
-footer
-{
-margin-top: 100px;
-height: 60px
-;
-background
-: #6184aa
-;
-border-radius
-: 0px 0px 5px 5px
-;
-vertical-align
-: bottom
-;
-}
-footer div
-{
-
-padding-top
-: 25px
-;
-font-weight
-: bold
-;
-padding-left
-: 10px
-;
-}
-footer span
-{
-margin-right
-: 15px
-;
-}
-#main
-{
-margin-top
-: 3px
-;
-}
-#main .leftAside
-{
-float
-: left
-;
-position
-: relative
-;
-width
-: 650px
-;
-background
-: #ccccff
-;
-border-radius
-: 5px
-;
-height
-: 100%
-;
-}
-#main .leftAside
-p
-{
-width
-: 96%
-;
-margin-left
-: 2%
-;
-text-align
-: justify
-;
+    width: 96%;
+    margin-left: 2%;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-#main .leftAside h3
-{
-margin
-: 0px
-;
-margin-left
-: 2%
-;
-margin-top
-: 2%
-;
-width
-: 96%
-;
-padding
-: 5px 0px 5px 0px
-;
-border-radius
-: 5px 5px 0px 0px;
-background
-: #76a5fc
-;
-text-align
-: center
-;
-}
-#main .leftAside table
-{
-margin
-: 5px
-;
-margin-left
-: 2%
-;
-margin-top
-: 2%
-;
-margin-bottom
-: 2%
-;
-width
-: 96%
-;
-padding
-: 5px 0p
-x 5px 0px
-;
-border-radius
-: 0px 0px 5px 5px;
-background
-: #76a5fc
-;
-text-align
-: center
-;
-border
-: 1px solid #333
-;
-}
-#main article
-{
-margin-left
-: 660px
-;
-margin-bottom
-: 5px
-;
-background
-: #80abdb
-;
-border
-: 1px solid #40658d
-;
-border-radius
-: 5px
-;
-}
-#main article h3
-{
-margin
-: 0px
-;
-margin-left
-: 2%
-;
-margin-top
-: 2%
-;
-width
-: 96%
-;
-padding
-: 5px 0px 5px 0px
-;
-border-radius
-: 5px 5px 0px 0px;
-background
-: #76a5fc
-;
-text-align
-: left
-;
-}
-#main article .text-article
-{
-padding
-: 5px
-;
-font-size
-: 15px
-;
-background: #cce6fc;
-}
-#main article .text-article lable
-{
-margin-right
-: 10px;
-width: 10px;
+header {
+    height: 150px;
+    border-radius: 10px;
+    background: #ccccff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom:10px;
 }
 
-#main article .fotter-article{
- height: 23px;
- background: #8babce;
- border-radius: 0px 0px 5px 5px;
- padding: 3px;
+#top-image {
+    height: 120px;
+    width: 120px;
+    top: 20px;
+    background: #6699ff;
+    position: absolute;
+    left: 5%;
+    border-radius: 10px;
+    border: 3px solid #fff;
 }
-#main article .date-article, .read{
- float: right;
- margin-left: 10px;
+
+#user-panel {
+    position: absolute;
+    top: 20px;
+    right: 5%;
+    padding: 10px;
+    background: #9999ff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-#main .leftAside table tr td {
-text-align: center;
+
+#main {
+    display: flex;
+    flex-grow: 1;
+    padding-bottom: 60px; /* Для предотвращения перекрытия футером */
+    justify-content: space-between;
+    gap: 20px;
 }
+
+#main .leftAside {
+    width: 650px;
+    background: #ccccff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    padding: 20px;
+}
+
+#main article {
+    flex-grow: 1;
+    background: #80abdb;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    
+}
+
+footer {
+    height: 60px;
+    background: #6184aa;
+    border-radius: 10px;
+    margin-top: auto;
+    text-align: center;
+    padding-top: 25px;
+    font-weight: bold;
+}
+
+footer div {
+    padding-left: 10px;
+}
+
+footer span {
+    margin-right: 15px;
+}
+
+/* Стили для таблицы */
+#main .leftAside table {
+    width: 96%;
+    margin: 5px auto;
+    background: #76a5fc;
+    text-align: center;
+    border-radius: 0px 0px 10px 10px;
+    border: 1px solid #333;
+}
+
 thead {
- background-color: #3f87a6;
- color: #fff;
+    background-color: #3f87a6;
+    color: #fff;
+}
+
+#main .leftAside table tr td {
+    text-align: center;
+}
+/* Стиль для формы внутри article */
+
+.text-article {
+    padding: 10px;
+}
+
+form p {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #0056b3;
 }
 

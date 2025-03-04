@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class DeveloperServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     String select_all_developers = "SELECT id, name, rating FROM developers";
+    String insert_developer = "INSERT INTO developers (name, rating) VALUES (?, ?)";
     ArrayList<Developer> developers = new ArrayList<>();
 
     public DeveloperServlet() {
@@ -62,6 +64,31 @@ public class DeveloperServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        String name = request.getParameter("name");
+        String ratingStr = request.getParameter("rating");
+        double rating = 0;
+
+        try {
+            rating = Double.parseDouble(ratingStr);
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+
+        EmpConnBuilder builder = new EmpConnBuilder();
+
+        try (Connection conn = builder.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(insert_developer);
+            preparedStatement.setString(1, name);
+            preparedStatement.setDouble(2, rating);
+
+            int rows = preparedStatement.executeUpdate();
+            if (rows > 0) {
+                // Успешно добавлен разработчик, перенаправляем на страницу с разработчиками
+                response.sendRedirect(request.getContextPath() + "/developers");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.getRequestDispatcher("/jspf/error.jsp").forward(request, response);
+        }
     }
 }

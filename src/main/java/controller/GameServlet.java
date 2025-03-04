@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class GameServlet extends HttpServlet {
 
     String select_all_games = "SELECT id, title, release_year, genre, system_requirements FROM games;";
     ArrayList<Game> games = new ArrayList<>();
+    String insert_game = "INSERT INTO games (title, release_year, genre, system_requirements) VALUES (?, ?, ?, ?);";
 
     public GameServlet() {
         // Конструктор, если нужно дополнительное подключение
@@ -48,7 +50,7 @@ public class GameServlet extends HttpServlet {
                 }
                 rs.close();
             } else {
-               System.out.println("ResultSet is null.");
+                System.out.println("ResultSet is null.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,6 +68,34 @@ public class GameServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        EmpConnBuilder builder = new EmpConnBuilder();
+
+        // Получаем данные из формы
+        String title = request.getParameter("title");
+        String releaseYear = request.getParameter("releaseYear");
+        String genre = request.getParameter("genre");
+        String systemRequirements = request.getParameter("systemRequirements");
+
+        // Обработка добавления игры
+        try (Connection conn = builder.getConnection()) {
+            PreparedStatement preparedStatement = conn.prepareStatement(insert_game);
+            preparedStatement.setString(1, title);
+            preparedStatement.setInt(2, Integer.parseInt(releaseYear));
+            preparedStatement.setString(3, genre);
+            preparedStatement.setString(4, systemRequirements);
+            int rows = preparedStatement.executeUpdate();
+
+            // Выводим результат выполнения
+            if (rows > 0) {
+                System.out.println("Игра добавлена успешно!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            getServletContext().getRequestDispatcher("/views/games.jsp").forward(request, response);
+        }
+
+        // После добавления перенаправляем обратно на страницу с играми
+        response.sendRedirect(request.getContextPath() + "/games");
     }
+
 }
