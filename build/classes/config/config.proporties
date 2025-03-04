@@ -1,0 +1,4 @@
+db.driver.class=org.postgresql.Driver
+db.url=jdbc:postgresql://localhost:5433/games
+db.login=postgres
+db.password=123456
