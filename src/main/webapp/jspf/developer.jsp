@@ -10,6 +10,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Developers</title>
+    <style>
+        th:nth-child(1), td:nth-child(1) {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 	<jsp:include page="header.jsp" />
@@ -24,6 +29,8 @@
                             <th scope="col">ID</th>
                             <th scope="col">Имя</th>
                             <th scope="col">Рейтинг</th>
+                            <th scope="col">Редактировать</th>
+							<th scope="col">Удалить</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +39,12 @@
                                 <td>${developer.getId()}</td>
                                 <td>${developer.getName()}</td>
                                 <td>${developer.getRating()}</td>
+                                <td width="20"><a href='<c:url value="/editdeveloper?id=${developer.getId()}" />'
+                                role="button" class="btn btn-outline-primary edit-delete">
+								<img alt="Редактировать" class="edit-delete"  src="${pageContext.request.contextPath}/jspf/images/icon-edit.png"></a></td> 
+								<td width="20"><a href='<c:url value="/deletedeveloper?id=${developer.getId()}"/>'
+								role="button" class="btn btn-outline-primary "> <img
+								alt="Удалить" class="edit-delete" src="${pageContext.request.contextPath}/jspf/images/icon-delete.png"></a></td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -43,6 +56,12 @@
             <article>
                 <h3>Добавить разработчика</h3>
                 <div class="text-article">
+                        <!-- Выводим ошибку, если она есть -->
+        <c:if test="${not empty error}">
+            <div style="color: red; font-weight: bold;">
+                ${error}
+            </div>
+        </c:if>
                     <form method="POST" action="developers">
                         <p>
                             <label for="name">Имя</label>
@@ -50,7 +69,7 @@
                         </p>
                         <p>
                             <label for="rating">Рейтинг</label>
-                            <input type="text" name="rating" id="rating" />
+                            <input type="number" name="rating" id="rating" />
                         </p>
                         <p>
                             <button type="submit">Добавить</button>

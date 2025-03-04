@@ -9,21 +9,18 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
 import domain.Game;
 import dao.EmpConnBuilder;
 
-@WebServlet("/games")
-public class GameServlet extends HttpServlet {
+@WebServlet("/editgame")
+public class EditGameServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    String select_all_games = "SELECT id, title, release_year, genre, system_requirements FROM games;";
-    ArrayList<Game> games = new ArrayList<>();
-    String insert_game = "INSERT INTO games (title, release_year, genre, system_requirements) VALUES (?, ?, ?, ?);";
+    String select_game_by_id = "SELECT id, title, release_year, genre, system_requirements FROM games WHERE id = ?;";
+    String update_game = "UPDATE games SET title = ?, release_year = ?, genre = ?, system_requirements = ? WHERE id = ?;";
 
-    public GameServlet() {
+    public EditGameServlet() {
         // Конструктор, если нужно дополнительное подключение
     }
 
@@ -32,57 +29,62 @@ public class GameServlet extends HttpServlet {
         response.setContentType("text/html");
 
         EmpConnBuilder builder = new EmpConnBuilder();
+        
+        // Получаем id игры из параметров запроса
+        String gameId = request.getParameter("id");
+        if (gameId == null || gameId.trim().isEmpty()) {
+            response.sendRedirect(request.getContextPath() + "/games");
+            return;
+        }
 
-        // Загрузка всех игр
         try (Connection conn = builder.getConnection()) {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(select_all_games);
+            // Загружаем данные игры по id
+            PreparedStatement stmt = conn.prepareStatement(select_game_by_id);
+            stmt.setLong(1, Long.parseLong(gameId));
+            ResultSet rs = stmt.executeQuery();
 
-            if (rs != null) {
-                games.clear();
-                while (rs.next()) {
-                    long id = rs.getLong("id");
-                    String title = rs.getString("title");
-                    int release_year = rs.getInt("release_year");
-                    String genre = rs.getString("genre");
-                    String system_requirements = rs.getString("system_requirements");
-                    games.add(new Game(id, title, release_year, genre, system_requirements));
-                }
-                rs.close();
+            if (rs != null && rs.next()) {
+                // Извлекаем данные из базы
+                long id = rs.getLong("id");
+                String title = rs.getString("title");
+                int releaseYear = rs.getInt("release_year");
+                String genre = rs.getString("genre");
+                String systemRequirements = rs.getString("system_requirements");
+
+                // Создаем объект Game и передаем на JSP
+                Game game = new Game(id, title, releaseYear, genre, systemRequirements);
+                request.setAttribute("gameEdit", game); 
             } else {
-                System.out.println("ResultSet is null.");
+                request.setAttribute("error", "Игра не найдена!");
             }
+            rs.close();
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("error", "Произошла ошибка при загрузке данных игры!");
         }
 
-        // Передаем информацию о играх на JSP
-        request.setAttribute("games", games);
-
-        // Перенаправляем на страницу с играми
-        String userPath = request.getServletPath();
-        if ("/games".equals(userPath)) {
-            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);
-        }
+        // Перенаправляем на страницу редактирования
+        request.getRequestDispatcher("/jspf/editgame.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EmpConnBuilder builder = new EmpConnBuilder();
 
-        // Получаем данные из формы
+        // Получаем параметры из формы
         String title = request.getParameter("title");
         String releaseYear = request.getParameter("releaseYear");
         String genre = request.getParameter("genre");
         String systemRequirements = request.getParameter("systemRequirements");
+        String gameId = request.getParameter("id");
 
         // Проверка на пустые поля
         if (title == null || title.trim().isEmpty() || releaseYear == null || releaseYear.trim().isEmpty() ||
             genre == null || genre.trim().isEmpty() || systemRequirements == null || systemRequirements.trim().isEmpty()) {
             // Если одно из полей пустое, добавляем атрибут с ошибкой
             request.setAttribute("error", "Все поля должны быть заполнены!");
-            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);  // Ожидаем отобразить на той же странице
-            return; // Завершаем выполнение метода
+            request.getRequestDispatcher("/jspf/editgame.jsp").forward(request, response);  // Ожидаем отобразить на той же странице
+            return;
         }
 
         // Проверка на корректность года выпуска
@@ -92,34 +94,33 @@ public class GameServlet extends HttpServlet {
         } catch (NumberFormatException e) {
             // Ошибка преобразования в число
             request.setAttribute("error", "Год выпуска должен быть числовым значением!");
-            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);
+            request.getRequestDispatcher("/jspf/editgame.jsp").forward(request, response);
             return;
         }
 
-        // Обработка добавления игры
+        // Обработка редактирования игры
         try (Connection conn = builder.getConnection()) {
-            PreparedStatement preparedStatement = conn.prepareStatement(insert_game);
+            PreparedStatement preparedStatement = conn.prepareStatement(update_game);
             preparedStatement.setString(1, title);
             preparedStatement.setInt(2, releaseYearInt);
             preparedStatement.setString(3, genre);
             preparedStatement.setString(4, systemRequirements);
+            preparedStatement.setLong(5, Long.parseLong(gameId));
 
             int rows = preparedStatement.executeUpdate();
 
             // Выводим результат выполнения
             if (rows > 0) {
-                System.out.println("Игра добавлена успешно!");
+                System.out.println("Игра обновлена успешно!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("error", "Произошла ошибка при добавлении игры!");
-            request.getRequestDispatcher("/jspf/game.jsp").forward(request, response);
+            request.setAttribute("error", "Произошла ошибка при обновлении игры!");
+            request.getRequestDispatcher("/jspf/editgame.jsp").forward(request, response);
             return;
         }
 
-        // После добавления перенаправляем обратно на страницу с играми
+        // После обновления перенаправляем обратно на страницу с играми
         response.sendRedirect(request.getContextPath() + "/games");
     }
-
-
 }
