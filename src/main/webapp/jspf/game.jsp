@@ -1,20 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page import="domain.Game"%>
-<%
-Game g1 = new Game(1L, "The Witcher 3", 2015, "RPG", "Windows 7+, 8GB RAM");
-Game g2 = new Game(2L, "Cyberpunk 2077", 2020, "RPG", "Windows 10, 16GB RAM");
-Game g3 = new Game(3L, "DOOM Eternal", 2020, "Shooter", "Windows 10, 8GB RAM");
-Game[] games = new Game[]{g1, g2, g3};
-pageContext.setAttribute("games", games);
-%>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Игры</title>
-    <link rel="stylesheet" type="text/css"
-          href="${pageContext.request.contextPath}/jspf/css/style.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jspf/css/style.css">
 </head>
 <body>
     <jsp:include page="header.jsp" />
