@@ -7,7 +7,11 @@
     <meta charset="UTF-8">
     <title>Игры</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jspf/css/style.css">
-
+    <style>
+        th:nth-child(1), td:nth-child(1) {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <jsp:include page="header.jsp" />

@@ -10,6 +10,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Developers</title>
+    <style>
+        th:nth-child(1), td:nth-child(1) {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 	<jsp:include page="header.jsp" />
@@ -64,7 +69,7 @@
                         </p>
                         <p>
                             <label for="rating">Рейтинг</label>
-                            <input type="text" name="rating" id="rating" />
+                            <input type="number" name="rating" id="rating" />
                         </p>
                         <p>
                             <button type="submit">Добавить</button>
