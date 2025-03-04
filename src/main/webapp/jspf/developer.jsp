@@ -24,6 +24,8 @@
                             <th scope="col">ID</th>
                             <th scope="col">Имя</th>
                             <th scope="col">Рейтинг</th>
+                            <th scope="col">Редактировать</th>
+							<th scope="col">Удалить</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +34,12 @@
                                 <td>${developer.getId()}</td>
                                 <td>${developer.getName()}</td>
                                 <td>${developer.getRating()}</td>
+                                <td width="20"><a href='<c:url value="/editdeveloper?id=${developer.getId()}" />'
+                                role="button" class="btn btn-outline-primary edit-delete">
+								<img alt="Редактировать" class="edit-delete"  src="${pageContext.request.contextPath}/jspf/images/icon-edit.png"></a></td> 
+								<td width="20"><a href='<c:url value="/deletedeveloper?id=${developer.getId()}"/>'
+								role="button" class="btn btn-outline-primary "> <img
+								alt="Удалить" class="edit-delete" src="${pageContext.request.contextPath}/jspf/images/icon-delete.png"></a></td>
                             </tr>
                         </c:forEach>
                     </tbody>

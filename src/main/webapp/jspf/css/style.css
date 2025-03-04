@@ -137,3 +137,9 @@ button:hover {
     background: #0056b3;
 }
 
+.edit-delete {
+	width:20px;
+}
+.btn-danger {
+background: #7c0a02;
+}

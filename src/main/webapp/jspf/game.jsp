@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Игры</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/jspf/css/style.css">
+
 </head>
 <body>
     <jsp:include page="header.jsp" />
@@ -22,6 +23,9 @@
                             <th>Год выпуска</th>
                             <th>Жанр</th>
                             <th>Системные требования</th>
+                            <th scope="col">Редактировать</th>
+							<th scope="col">Удалить</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -32,6 +36,12 @@
                                 <td>${game.releaseYear}</td>
                                 <td>${game.genre}</td>
                                 <td>${game.systemRequirements}</td>
+                                <td width="20"><a href='<c:url value="/editgame?id=${game.getId()}" />'
+                                role="button" class="btn btn-outline-primary edit-delete">
+								<img alt="Редактировать" class="edit-delete"  src="${pageContext.request.contextPath}/jspf/images/icon-edit.png"></a></td> 
+								<td width="20"><a href='<c:url value="/deletegame?id=${game.getId()}"/>'
+								role="button" class="btn btn-outline-primary "> <img
+								alt="Удалить" class="edit-delete" src="${pageContext.request.contextPath}/jspf/images/icon-delete.png"></a></td>
                             </tr>
                         </c:forEach>
                     </tbody>
